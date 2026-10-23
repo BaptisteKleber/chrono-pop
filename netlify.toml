@@ -1,0 +1,27 @@
+# Site statique (dist) + une Edge Function qui relaie /api/* vers l'API chrono-pop de docker-2.
+# Variables d'environnement à déclarer dans Netlify (Site configuration > Environment variables) :
+#   CHRONO_API_URL : https://public.api.service.buhte.ch:8100/chrono-pop/v1/chrono
+#   CHRONO_API_KEY : la clé x-api-key du proxy (jamais dans le code)
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# L'Edge Function netlify/edge-functions/api.ts déclare elle-même sa route (/api/*), avant les redirections ci-dessous
+
+# SPA : toutes les URL (/admin, /animateur/3, /score…) servent index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# index.html jamais en cache (un nouveau déploiement est pris au rechargement), les assets hachés un an
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
