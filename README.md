@@ -51,6 +51,12 @@ chrono-pop.
 
 # CHANGE LOGS
 
+## V0.1.1 - `23/10/2026`
+
+- 🪲 CHRONO POP : « code PIN refusé » sur les vues arbitre et animateur. Le proxy devant l'API ne relaie pas les
+  en-têtes personnalisés : le PIN et le nom de l'écran partent maintenant dans le corps JSON des requêtes.
+- Nécessite l'API chrono-pop 0.1.1.
+
 ## V0.1.0 - `23/10/2026`
 
 - 🆕 CHRONO POP : l'appli de Claire branchée sur une vraie base, pour le séminaire « Pop in Dubaï » (2 novembre).
