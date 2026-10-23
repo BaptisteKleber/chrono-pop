@@ -68,21 +68,18 @@ function measureOffset(serverMs: number, t0: number, t1: number) {
 
 let ecranCourant = "menu"
 
-async function call<T>(action: string, body?: unknown, pin?: string): Promise<T> {
-  const headers: Record<string, string> = { "X-Chrono-Ecran": ecranCourant }
-  if (pin) {
-    headers["X-Chrono-Pin"] = pin
-  }
-  if (body !== undefined) {
-    headers["Content-Type"] = "application/json"
-  }
+/**
+ * Lecture : GET avec le nom de l'écran dans l'URL. Écriture : POST JSON avec le PIN et le nom de l'écran dans le
+ * corps (champs pin et ecran). Pas d'en-tête personnalisé : le proxy devant l'API ne les relaie pas.
+ */
+async function call<T>(action: string, body?: object, pin?: string): Promise<T> {
   const t0 = Date.now()
   let res: Response
   try {
     res = await fetch(`/api/${action}${action === "sync" ? `?ecran=${encodeURIComponent(ecranCourant)}` : ""}`, {
       method: body === undefined ? "GET" : "POST",
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify({ ...body, pin: pin ?? "", ecran: ecranCourant }),
       cache: "no-store",
     })
   } catch {
@@ -188,7 +185,7 @@ document.addEventListener("visibilitychange", () => {
 
 // ---------- Écritures ----------
 
-async function write(action: string, body: unknown, role: Role): Promise<Sync> {
+async function write(action: string, body: object, role: Role): Promise<Sync> {
   const sync = await call<Sync>(action, body, getPin(role))
   applySync(sync)
   return sync

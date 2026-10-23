@@ -24,12 +24,11 @@ export default async (request: Request) => {
     return json(404, `Action inconnue : ${action}`)
   }
 
+  // Le PIN et le nom de l'écran sont dans le corps JSON : le proxy ne relaie pas les en-têtes personnalisés
   const headers = new Headers({ "x-api-key": key, accept: "application/json" })
-  for (const h of ["content-type", "x-chrono-pin", "x-chrono-ecran"]) {
-    const v = request.headers.get(h)
-    if (v) {
-      headers.set(h, v)
-    }
+  const contentType = request.headers.get("content-type")
+  if (contentType) {
+    headers.set("content-type", contentType)
   }
   try {
     const res = await fetch(`${base.replace(/\/$/, "")}/${action}${url.search}`, {
