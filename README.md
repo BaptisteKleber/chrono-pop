@@ -48,3 +48,18 @@ chrono-pop.
 - Cliquer « Activer le son » sur chaque écran (à refaire après un rechargement).
 - Pas de déploiement le jour même.
 - Remise à zéro après la répétition : `reset.sql` (scores, bonus et journal archivés avant).
+
+# CHANGE LOGS
+
+## V0.1.0 - `23/10/2026`
+
+- 🆕 CHRONO POP : l'appli de Claire branchée sur une vraie base, pour le séminaire « Pop in Dubaï » (2 novembre).
+  - Les écrans de Claire à l'identique (charte, chrono façon tableau des départs, sons), une URL par écran.
+  - Chrono commun aux 8 ateliers, lancé par l'arbitre, synchronisé sur l'horloge du serveur.
+  - Saisie des points par les animateurs, gardée sur l'appareil et renvoyée toute seule si le réseau tombe.
+  - Vue arbitre : suivi des saisies, écrans connectés, bonus transverses, mode de la télé, export CSV.
+  - Télé du classement : masquée, en direct, ou révélation de la dernière à la première équipe.
+  - Codes PIN arbitre et animateurs.
+- Nécessite l'API chrono-pop 0.1.0.
+- MEP : site Netlify avec les variables `CHRONO_API_URL` et `CHRONO_API_KEY`, puis `bun run build` et
+  `npx netlify-cli deploy --prod --dir dist`.
